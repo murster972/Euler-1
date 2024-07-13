@@ -104,7 +104,6 @@ thousands = lambda x: 99500 + ((x*2) * 100000)
 #   100000:   999950000
 #   1000000:  99999500000
 #   10000000: 9999995000000
-
 #
 # the number of 9s at the start are the same
 # as the number of zeros in (N - 1), e.g.
@@ -163,6 +162,34 @@ thousands = lambda x: 99500 + ((x*2) * 100000)
 #       we need to manually iterate any values before that, tbf
 #       we could also cache them, but since it's so few values I
 #       don't think it will make a difference.
+#
+#       so say we had 999, we would work out:
+#         - 100 to 899
+#         - 10  to 89
+#         - 0   to 8
+#
+#       this is assuming is due to the fact that it's
+#       not inclusive.
+#
+#       QUESTION: is this assumption wrong though, would
+#                 we not want all values to be inclusive
+#                 except values before the tens?, i.e. the
+#                 last range (9) in this case?
+#
+#                 not sure, we can come back to this when we're
+#                 stitching together.
+#
+#       NOTE: fuck me, I just realized this won't work...
+#             it doesn't take into account the fact that
+#             there are shared values between 3 and 5
+#             that we don't want to duplicate.
+#
+#             So we'd also need a way to work out the sum
+#             of shared values between 3 and 5 in a given
+#             range....
+#
+#             okay lets work out the formula for 3 and come
+#             back to this.
 def get_prefix(n):
   count = str(n).count("0") - 1
   nines = "9" * count
@@ -193,14 +220,12 @@ def test_formula():
 
     for i in range(step, step * 10, step):
       end = i + step
-      # values = [j for j in range(i, end) if j % 5 == 0]
-      # total = sum(values)
-
+      values = [j for j in range(i, end) if j % 5 == 0]
+      total = sum(values)
       check = formula(step, i // step)
-      print(i, check)
 
-      # if total != check:
-      #   failed.append((i, total, check))
+      if total != check:
+        failed.append((i, total, check))
 
   assert len(failed) == 0, failed
 
