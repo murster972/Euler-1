@@ -1,0 +1,75 @@
+    # if we've already caluclate 0-N then we could cache them so that
+    # next time it's just a look up?
+    #
+    # that way if we had N+10 next time we'd only need to iterate
+    # over N->N+10 instead of 0->N+10
+    #
+    # simple solution of caching all values between 0 and N doesn't work,
+    # we end up with a MemoryError - even if we limit the cache to when
+    # the running total changes.
+    #
+    # however we know that we can cache all values upto 10^5, so we know
+    # we can cache all input values. So it is possible to create a cache.
+    #
+    # which means we're back to find the closest index.
+    #
+    # what if we cache every Nth value instead? we would need to go up in increments
+    # of 226.
+    #
+    # fuck it lets try it. so we'd want to:
+    #   - pre-populate the cache
+    #   - to get the closest value to N in the list do (226 * (N // 226))
+    #   - then iterate from there
+    #
+    # annoyingly this doens't work, we timeout while attempting to create the cache.
+    # we've also tried increments of 3 and 5 when creating the cache and we still
+    # timeout.
+    #
+    # which means we're back to creating a cache for the loaded values and then searching
+    # that cache to find the neareast value.
+    #
+    # we've also tried the simple caching solution in Java, and it still times out.
+    #
+    # I really cbf with the binary search idea...even then if we had a single value for
+    # 10^5 it would still timeout as we'd still need to iterate over all the values.
+    #
+    # Wonder if we can find a pattern with the numbers?
+
+
+Could we pregenerate the cache?
+- seems not
+- have tried various combos and can't get it to not exceed time limit or file-size limit
+
+
+
+
+
+
+
+
+4
+10
+100
+1000
+10000
+
+23
+2318
+233168
+23331668
+
+
+23
+2318
+55643
+377393
+
+
+3 6  9  12 15 18 21 24 27 30 33 36 39 41 44 47 50 53 56 59 61 64 70
+5 10 15 20 25 30 25 40 45 50 55 60 65 70
+
+so starting at 30, every 4th number will number for multiples of 5
+will also be divisible by 3.
+
+
+
